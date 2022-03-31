@@ -1,0 +1,36 @@
+{
+  "contacts": [
+    {
+      "id": 1,
+      "firstName": "Peter",
+      "lastName": "Parker",
+      "number": "+12345678901",
+      "creationDate": "26 Mar 2022",
+      "timestamp": 1648278289
+    },
+    {
+      "id": 2,
+      "firstName": "Norman",
+      "lastName": "Osborn",
+      "number": "+12345678901",
+      "creationDate": "27 Mar 2022",
+      "timestamp": 1648364689
+    },
+    {
+      "id": 3,
+      "firstName": "Harry",
+      "lastName": "Osborn",
+      "number": "+12345678901",
+      "creationDate": "27 Mar 2022",
+      "timestamp": 1648364689
+    },
+    {
+      "id": 4,
+      "firstName": "Eddie",
+      "lastName": "Brock",
+      "number": "+12345678901",
+      "creationDate": "1 Apr 2022",
+      "timestamp": 1648796689
+    }
+  ]
+}
