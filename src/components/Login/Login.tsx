@@ -78,8 +78,9 @@ export default function App() {
                     <LoginMessage authStatus={authStatus}/>
                     <TextField
                         margin='normal'
+                        color='info'
                         fullWidth
-                        variant='outlined'
+                        variant='filled'
                         name='email'
                         label='Email'
                         type='email'
@@ -87,8 +88,9 @@ export default function App() {
                     />
                     <TextField
                         margin='normal'
+                        color='info'
                         fullWidth
-                        variant='outlined'
+                        variant='filled'
                         name='password'
                         label='Password'
                         type='password'
