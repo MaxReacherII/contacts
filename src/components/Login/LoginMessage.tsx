@@ -14,23 +14,24 @@ export default function LoginMessage(props: IProps) {
     useEffect(() => {
         switch (props.authStatus.type){
             case 'error':
-                setColor('red')
+                setColor('error.main')
                 break;
             case 'text':
-                setColor('black')
+                setColor('text.main')
                 break;
             case 'warning':
-                setColor('orange')
+                setColor('warning.main')
                 break;
             case 'success':
-                setColor('green')
+                setColor('success.main')
                 break;
         }
     }, [props.authStatus])
 
     return(
         <Typography
-            sx={{fontWeight: 'bold', mt:1, color: `${color}`}}
+            sx={{color: color}}
+            mt={1}
         >
             {props.authStatus.message}
         </Typography>

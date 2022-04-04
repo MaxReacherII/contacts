@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button, { ButtonProps } from '@mui/material/Button';
-import {styled} from '@mui/material/styles';
+import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import LoginMessage from "./LoginMessage";
 import useAxios from "axios-hooks";
@@ -14,12 +13,12 @@ export default function App() {
         type: 'text',
         message: 'Please login or register'
     });
-    const [{ data: registrationData, error: registrationError}, registrationUser] = useAxios({
+    const [{ data: registrationData}, registrationUser] = useAxios({
         url: 'http://localhost:4000/auth/register',
         method: 'POST'
     }, {manual: true})
 
-    const [{data: loginData, error: loginError}, loginUser] = useAxios({
+    const [{data: loginData}, loginUser] = useAxios({
         url: 'http://localhost:4000/auth/login',
         method: 'POST'
     }, {manual: true})
@@ -67,7 +66,7 @@ export default function App() {
                 sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 5}}
             >
                 <Typography
-                    sx={{fontSize: 29}}
+                    sx={{fontSize: 27, fontWeight: 'bold'}}
                 >
                     Welcome to My Contacts App
                 </Typography>

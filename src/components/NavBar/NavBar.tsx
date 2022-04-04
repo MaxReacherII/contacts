@@ -6,14 +6,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button, { ButtonProps } from '@mui/material/Button';
 import {styled} from '@mui/material/styles';
-import useAxios from "axios-hooks";
+import ThemeSwitch from "./ThemeSwitch";
+import {observer} from "mobx-react-lite";
 
-const MenuButton = styled(Button)<ButtonProps>(({ theme }) => ({
+const MenuButton = styled(Button)<ButtonProps>(() => ({
     color: 'white',
     marginRight: 15
 }))
 
-export default function App() {
+const NavBar = observer(() => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -29,7 +30,7 @@ export default function App() {
     }
 
     return(
-        <AppBar position='fixed'>
+        <AppBar position='fixed' sx={{backgroundColor: 'primary.main'}}>
             <Toolbar >
                 <div>
                     <Typography
@@ -41,6 +42,7 @@ export default function App() {
                     </Typography>
                 </div>
                 <Box my={0} ml='auto' mr={0}>
+                    <ThemeSwitch />
                     <MenuButton onClick={handleContacts}>
                         Contacts
                     </MenuButton>
@@ -51,4 +53,6 @@ export default function App() {
             </Toolbar>
         </AppBar>
     )
-}
+})
+
+export default NavBar;
