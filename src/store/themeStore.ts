@@ -10,7 +10,7 @@ const genTheme = (type: PaletteMode) => {
         palette: {
             mode: type,
             primary: {
-                main: '#3f51b5',
+                main: '#3f51b5'
             },
             secondary: {
                 main: '#f50057',
@@ -19,7 +19,7 @@ const genTheme = (type: PaletteMode) => {
                 default: type==='dark' ? '#303030' : '#fafafa',
                 paper: type==='dark' ? '#424242' : '#fff'
             }
-        },
+        }
     })
 }
 
@@ -28,13 +28,14 @@ class ThemeStore {
         makeAutoObservable(this)
     }
 
-    mode: PaletteMode = 'light'
+    mode: PaletteMode = localStorage.getItem('theme') ? (localStorage.getItem('theme')==="dark" ? "dark" : "light") : "light"
 
     switchTheme = () => {
         this.mode === 'light' ? this.mode = 'dark' : this.mode = 'light'
     }
 
     get theme() {
+        localStorage.setItem('theme', this.mode)
         return genTheme(this.mode)
     }
 }

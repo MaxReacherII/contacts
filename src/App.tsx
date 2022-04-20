@@ -5,6 +5,20 @@ import Contacts from './components/Contacts/Contacts';
 import NavBar from './components/NavBar/NavBar';
 import Box from '@mui/material/Box';
 import {Theme} from "./theme/theme";
+import Typography from "@mui/material/Typography";
+
+function Copyright() {
+    return(
+        <Typography
+            sx={{
+                textAlign: 'center',
+                marginBottom: 1
+            }}
+        >
+            Copyright © {new Date().getFullYear()} Your Website
+        </Typography>
+    )
+}
 
 function App() {
     return (
@@ -14,10 +28,11 @@ function App() {
                     <NavBar />
                     <Box
                         mx='auto'
-                        my='10vh'
                         sx={{
                             height: '85vh',
                             width: '85vh',
+                            marginTop: '10vh',
+                            marginBottom: '1vh',
                             border: '1px solid',
                             borderColor: 'background.paper',
                             borderRadius: 1,
@@ -26,10 +41,11 @@ function App() {
                         }}
                     >
                         <Routes>
-                            <Route path='/' element={<Login />} />
                             <Route path='contacts' element={<Contacts />} />
+                            <Route path='/' element={<Login />} />
                         </Routes>
                     </Box>
+                    <Copyright/>
                 </Router>
             </Theme>
         </div>

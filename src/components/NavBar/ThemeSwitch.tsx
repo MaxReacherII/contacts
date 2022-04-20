@@ -56,7 +56,6 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
 const ThemeSwitch = observer(() => {
     const handleTheme = () => {
         themeStore.switchTheme()
-        console.log(themeStore.mode, themeStore.theme)
     }
 
     return(

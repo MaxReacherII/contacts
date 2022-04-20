@@ -8,6 +8,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import {styled} from '@mui/material/styles';
 import ThemeSwitch from "./ThemeSwitch";
 import {observer} from "mobx-react-lite";
+import {userStore} from "../../store/userStore";
 
 const MenuButton = styled(Button)<ButtonProps>(() => ({
     color: 'white',
@@ -25,7 +26,11 @@ const NavBar = observer(() => {
     }
 
     const handleLogout = () => {
-        //magic
+        userStore.userData = {
+            email: '',
+            access_token: ''
+        }
+        sessionStorage.clear()
         navigate('/')
     }
 

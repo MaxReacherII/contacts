@@ -43,6 +43,13 @@ server.post('/auth/register', (req, res) => {
         return res.status(status).send({status: status, message: message});
     }
 
+    if (password.length < 8 || email === '') {
+        const status = 403
+        const message = 'Incorrect email or password'
+        res.status(status).json({status, message})
+        return
+    }
+
     fs.readFile(jsonUsers, (err, data) => {
         if (err) {
             const status = 401
@@ -93,7 +100,7 @@ server.post('/auth/login', (req, res) => {
     }
     const access_token = createToken({email, password})
     console.log("Access Token:" + access_token);
-    res.status(200).json({access_token})
+    res.status(200).json({access_token, email})
 })
 
 server.use(/^(?!\/auth).*$/,  (req, res, next) => {

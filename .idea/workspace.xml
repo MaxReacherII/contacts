@@ -2,8 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="301c83df-9742-43b0-b88f-45ad4e797caf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/api/axiosConfig.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hooks/useAuth.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/store/userStore.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/db.json" beforeDir="false" afterPath="$PROJECT_DIR$/db.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/users.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Contacts/Contacts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Contacts/Contacts.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Login/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Modal/Modal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Modal/Modal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavBar/NavBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar/NavBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavBar/ThemeSwitch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar/ThemeSwitch.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/themeStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/themeStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,14 +60,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="ts.external.directory.path" value="C:\Users\makchern\Desktop\contacts\node_modules\typescript\lib" />
+    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="ts.external.directory.path" value="C:\Users\MaxReacher\Desktop\contacts\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\MaxReacher\Desktop\contacts" />
       <recent name="C:\Users\makchern\Desktop\contacts\api" />
       <recent name="C:\Users\makchern\Desktop\contacts" />
     </key>
@@ -73,7 +93,24 @@
       <workItem from="1648631852672" duration="6410000" />
       <workItem from="1648718901368" duration="11336000" />
       <workItem from="1648808936294" duration="8015000" />
-      <workItem from="1649065369859" duration="8726000" />
+      <workItem from="1649065369859" duration="13606000" />
+      <workItem from="1649143010767" duration="2000" />
+      <workItem from="1649174837960" duration="214000" />
+      <workItem from="1649175494876" duration="1072000" />
+      <workItem from="1649177251995" duration="5098000" />
+      <workItem from="1649336389680" duration="4911000" />
+      <workItem from="1649418768176" duration="2178000" />
+      <workItem from="1649751387713" duration="5154000" />
+      <workItem from="1649780475240" duration="3133000" />
+      <workItem from="1649841742725" duration="6729000" />
+      <workItem from="1649861658119" duration="8193000" />
+      <workItem from="1649932960249" duration="1788000" />
+      <workItem from="1650026501343" duration="6080000" />
+      <workItem from="1650098790101" duration="707000" />
+      <workItem from="1650269179237" duration="4820000" />
+      <workItem from="1650361144681" duration="9877000" />
+      <workItem from="1650376386175" duration="3668000" />
+      <workItem from="1650444165850" duration="636000" />
     </task>
     <servers />
   </component>
