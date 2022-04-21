@@ -1,6 +1,6 @@
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {ThemeProvider} from "@mui/material/styles";
 import {CssBaseline} from "@mui/material";
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {themeStore} from "../store/themeStore";
 import {observer} from "mobx-react-lite";
 

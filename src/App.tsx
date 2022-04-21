@@ -6,6 +6,7 @@ import NavBar from './components/NavBar/NavBar';
 import Box from '@mui/material/Box';
 import {Theme} from "./theme/theme";
 import Typography from "@mui/material/Typography";
+import AuthProvider from './components/Login/authProvider';
 
 function Copyright() {
     return(
@@ -41,8 +42,14 @@ function App() {
                         }}
                     >
                         <Routes>
-                            <Route path='contacts' element={<Contacts />} />
+                            <Route path='contacts' element={
+                                <AuthProvider>
+                                    <Contacts />
+                                </AuthProvider>
+                            }
+                            />
                             <Route path='/' element={<Login />} />
+                            <Route path="*" element={<h3>There's nothing here: 404!</h3>} />
                         </Routes>
                     </Box>
                     <Copyright/>

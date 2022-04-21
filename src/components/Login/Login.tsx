@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import LoginMessage from "./LoginMessage";
-import useAxios from "axios-hooks";
+import {registerUser, loginUser} from "../../api/login";
 import {Container} from "@mui/material";
 import {userStore} from "../../store/userStore";
 
@@ -15,15 +15,6 @@ export default function App() {
         type: 'text',
         message: 'Please login or register'
     });
-    const [{ data: registrationData}, registrationUser] = useAxios({
-        url: 'http://localhost:4000/auth/register',
-        method: 'POST'
-    }, {manual: true})
-
-    const [{data: loginData}, loginUser] = useAxios({
-        url: 'http://localhost:4000/auth/login',
-        method: 'POST'
-    }, {manual: true})
     const navigate = useNavigate();
 
     const handleTypeSubmit = (event: React.MouseEvent) => {
@@ -33,55 +24,29 @@ export default function App() {
 
     useEffect(() => {
         userStore.userData.access_token && navigate('/contacts')
-    })
+    }, [])
 
-    const handleSubmit = (event: React.FormEvent) => {     //  <-- need type here
+    const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         const email = event.target[0].value;
         const password = event.target[1].value;
         if(authType === 'signup') {
-            registrationUser({data: {email: email, password: password}})
-                .then((res) => {
+            registerUser({email: email, password: password})
+                .then(() => {
                     setAuthStatus({type: 'success', message: 'Registered successfully'})
                 })
                 .catch((e) => {
-                    switch (e.message.split(' ').pop()){
-                        case '409':
-                            setAuthStatus({type: 'error', message: 'User already exists'})
-                            break;
-                        case '404':
-                            setAuthStatus({type: 'error', message: 'Auth Server is unavailable'})
-                            break;
-                        case '401':
-                            setAuthStatus({type: 'error', message: 'Error with email or password'})
-                            break;
-                        case '403':
-                            setAuthStatus({type: 'error', message: 'Incorrect email or password'})
-                            break;
-                    }
+                    setAuthStatus({type: 'error', message: e.response.data.message})
                 })
         }
         if(authType === 'signin') {
-            loginUser({data: {email: email, password: password}})
+            loginUser({email: email, password: password})
                 .then((res) => {
-                    userStore.userData = res.data
-                    sessionStorage.setItem('email', res.data.email)
-                    sessionStorage.setItem('access_token', res.data.access_token)
+                    userStore.signIn(res.data)
                     navigate('/contacts')
                 })
                 .catch((e) => {
-                    console.log(e)
-                    switch (e.message.split(' ').pop()){
-                        case '403':
-                            setAuthStatus({type: 'error', message: 'Incorrect email or password'})
-                            break;
-                        case '404':
-                            setAuthStatus({type: 'error', message: 'Auth Server is unavailable'})
-                            break;
-                        case '401':
-                            setAuthStatus({type: 'error', message: 'Error with login or password'})
-                            break;
-                    }
+                    setAuthStatus({type: 'error', message: e.response.data.message})
                 })
         }
     }

@@ -9,6 +9,7 @@ import {styled} from '@mui/material/styles';
 import ThemeSwitch from "./ThemeSwitch";
 import {observer} from "mobx-react-lite";
 import {userStore} from "../../store/userStore";
+import Person from '../../assets/person.svg';
 
 const MenuButton = styled(Button)<ButtonProps>(() => ({
     color: 'white',
@@ -26,26 +27,27 @@ const NavBar = observer(() => {
     }
 
     const handleLogout = () => {
-        userStore.userData = {
-            email: '',
-            access_token: ''
-        }
-        sessionStorage.clear()
+        userStore.signOut();
         navigate('/')
     }
 
     return(
         <AppBar position='fixed' sx={{backgroundColor: 'primary.main'}}>
             <Toolbar >
-                <div>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}
+                >
+                    <img src={Person} alt="Contacts Logo" style={{marginRight: '5px'}}/>
                     <Typography
                         variant='h5'
                         noWrap
-                        sx={{ flexGrow: 1, display: { xs: 'flex' }}}
                     >
                         My Contacts App
                     </Typography>
-                </div>
+                </Box>
                 <Box my={0} ml='auto' mr={0}>
                     <ThemeSwitch />
                     <MenuButton onClick={handleContacts}>

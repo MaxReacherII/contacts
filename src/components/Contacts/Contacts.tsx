@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import useAxios from "axios-hooks";
-import {DataGrid, GridColDef, GridRowModel, GridSelectionModel, GridToolbarContainer} from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridRowModel, GridSelectionModel} from "@mui/x-data-grid";
 import {userStore} from "../../store/userStore";
 import {observer} from "mobx-react-lite";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {useNavigate} from "react-router-dom";
 import CustomModal from "../Modal/Modal";
+import QuickSearch from "./Search";
+import {Box, Button} from "@mui/material";
+import {addContact, editContact, getContacts, deleteContacts} from "../../api/contacts";
 
 export interface IContacts {
     id: number;
@@ -62,45 +63,54 @@ const columns: GridColDef[] = [
     }
 ]
 
+function escapeRegExp(value: string): string {
+    return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 const Contacts = observer(() => {
     const navigate = useNavigate();
-    useEffect(() => {
-         userStore.userData.access_token === '' && navigate('/')
-    });
     const [contacts, setContacts] = useState<IContacts[]>();
+    const [searchText, setSearchText] = useState('');
+    const [searchResults, setSearchResults] = useState<IContacts[]>();
     const [editingValues, setEditingValues] = useState<GridRowModel>();
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [operationType, setOperationType] = useState('add')
-    const [{ data: getContactsData, loading: getContactsLoading}, getContacts] = useAxios({
-        url: 'http://localhost:4000/contacts',
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${userStore.userData.access_token}`
+    const [operationType, setOperationType] = useState('add');
+
+    const expiredToken = (e) => {
+        if(e.response.status === 401) {
+            userStore.signOut();
+            return navigate('/');
         }
-    }, {useCache:false});
-    const [{ data: addContactData}, addContact] = useAxios({
-        url: 'http://localhost:4000/contacts',
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${userStore.userData.access_token}`
-        }
-    }, {manual: true});
-    const [{ data: editContactData}, editContact] = useAxios({
-        method: 'PUT',
-        headers: {
-            Authorization: `Bearer ${userStore.userData.access_token}`
-        }
-    }, {manual: true});
-    const [{ data: deleteContactData}, deleteContact] = useAxios({
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${userStore.userData.access_token}`
-        }
-    }, {manual: true});
+    };
+
+    const getC = () => {
+        getContacts()
+            .then((res) => {
+                setContacts(res.data)
+            })
+            .catch((e) => {
+                expiredToken(e)
+            })
+    };
+
+    useEffect(() => {
+        getC()
+    }, []);
 
     const handleClose = () => {
         setModalOpen(false)
+    };
+
+    const requestSearch = (searchValue: string) => {
+        setSearchText(searchValue);
+        const searchRegex = new RegExp(escapeRegExp(searchValue), 'i');
+        const filteredRows = contacts.filter((row) => {
+            return Object.keys(row).some((field) => {
+                return searchRegex.test(row[field].toString());
+            });
+        });
+        setSearchResults(filteredRows);
     };
 
     const handleSubmit = ({firstName, lastName, phoneNumber, editingValues, deleteItems}: IFormData) => {
@@ -108,35 +118,32 @@ const Contacts = observer(() => {
             return new Date().toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'})
         };
         if (operationType === 'add') {
-            addContact({data: {firstName, lastName, phoneNumber, creationDate: getDate()}})
+            addContact({firstName, lastName, phoneNumber}, getDate())
                 .catch((e) => {
-                    console.log(e)
-                    e.message.split(' ').pop() === '401' && navigate('/login')
+                    expiredToken(e)
                 })
         }
 
         if (operationType === 'edit' ) {
-            editContact({url: `http://localhost:4000/contacts/${editingValues.id}`, data: {...editingValues}})
+            editContact(editingValues.id, {...editingValues})
                 .catch((e) => {
-                    console.log(e)
-                    e.message.split(' ').pop() === '401' && navigate('/login')
+                    expiredToken(e)
                 })
         }
 
         if (operationType === 'delete') {
             deleteItems.forEach((value, index, array) => {
-                deleteContact({url: `http://localhost:4000/contacts/${value}`})
+                deleteContacts(value)
                     .then(() => {
-                        array[array.length - 1] === value && getContacts()
+                        array[array.length-1] === value && getC()
                     })
                     .catch((e) => {
-                        console.log(e)
-                        e.message.split(' ').pop() === '401' && navigate('/login')
+                        expiredToken(e)
                     })
             })
         }
         setSelectionModel([]);
-        getContacts();
+        getC();
         handleClose();
     }
 
@@ -159,20 +166,26 @@ const Contacts = observer(() => {
         return {...oldRow}
     };
 
-    useEffect(() => {
-        if(getContactsData && getContactsLoading===false){
+    /*useEffect(() => {
+        if (getContactsData && getContactsLoading===false){
             setContacts(getContactsData)
         }
-    }, [getContactsLoading, contacts]);
+        if (getContactsError?.response.status === 401) {
+            userStore.signOut();
+            navigate('/');
+        }
+
+    }, [getContactsLoading, contacts]);*/
 
     const CustomToolbar = () => {
         return (
-            <GridToolbarContainer>
+            <Box sx={{display: 'flex'}}>
                 <Button
                     onClick={addContactHandler}
                     sx={{
                         color: 'info.main',
-                        marginRight: 2
+                        mr: '10px',
+                        p: '0 20px'
                     }}
                 >
                     <AddIcon />
@@ -181,13 +194,15 @@ const Contacts = observer(() => {
                 <Button
                     onClick={deleteContactHandler}
                     sx={{
-                        color: 'info.main'
+                        color: 'info.main',
+                        p: '0 15px'
                     }}
                 >
                     <DeleteIcon />
                     Delete
                 </Button>
-            </GridToolbarContainer>
+                <QuickSearch requestSearch={requestSearch} value={searchText}/>
+            </Box>
         );
     };
 
@@ -203,7 +218,7 @@ const Contacts = observer(() => {
             />
             {contacts &&
                 <DataGrid
-                rows={contacts}
+                rows={searchText ? searchResults : contacts}
                 columns={columns}
                 editMode='row'
                 pageSize={20}

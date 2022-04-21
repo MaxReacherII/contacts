@@ -1,13 +1,13 @@
-const jsonData = './db.json';
-const jsonUsers = './users.json';
-
-const fs = require('fs')
+const emailRegEx = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/gm
+const DB = './db.json';
+const Users = './users.json';
+const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const jsonServer = require('json-server')
-const jwt = require('jsonwebtoken')
+const fs = require('fs')
 
 const server = jsonServer.create()
-const router = jsonServer.router(jsonData)
+const router = jsonServer.router(DB)
 
 server.use(bodyParser.urlencoded({extended: true}))
 server.use(bodyParser.json())
@@ -16,22 +16,18 @@ server.use(jsonServer.defaults());
 const SECRET_KEY = 'ForTheHorde!'
 const expiresIn = '1h'
 
-// Create a token from a payload
 function createToken(payload){
     return jwt.sign(payload, SECRET_KEY, {expiresIn})
 }
 
-// Verify the token
 function verifyToken(token){
     return  jwt.verify(token, SECRET_KEY, (err, decode) => decode !== undefined ?  decode : err)
 }
 
-// Check if the user exists in database
 function isAuthenticated({email, password}){
-    return JSON.parse(fs.readFileSync(jsonUsers, 'UTF-8')).users.findIndex(user => user.email === email && user.password === password) !== -1
+    return JSON.parse(fs.readFileSync(Users, 'UTF-8')).users.findIndex(user => user.email === email && user.password === password) !== -1
 }
 
-// Register New User
 server.post('/auth/register', (req, res) => {
     console.log("register endpoint called; request body:");
     console.log(req.body);
@@ -43,14 +39,22 @@ server.post('/auth/register', (req, res) => {
         return res.status(status).send({status: status, message: message});
     }
 
-    if (password.length < 8 || email === '') {
-        const status = 403
-        const message = 'Incorrect email or password'
+    if (password.length < 8) {
+        const status = 400
+        const message = 'Password must be at least 8 characters'
         res.status(status).json({status, message})
         return
     }
 
-    fs.readFile(jsonUsers, (err, data) => {
+    if (!email.match(emailRegEx)) {
+        const status = 400
+        const message = 'Invalid email format'
+        res.status(status).json({status, message})
+        return
+    }
+
+
+    fs.readFile(Users, (err, data) => {
         if (err) {
             const status = 401
             const message = err
@@ -58,10 +62,8 @@ server.post('/auth/register', (req, res) => {
             return
         };
 
-        // Get current users data
         var dataObj = JSON.parse(data.toString());
 
-        // Get the id of last user
         var last_item_id
         try{
             last_item_id = dataObj.users[dataObj.users.length-1].id
@@ -69,9 +71,8 @@ server.post('/auth/register', (req, res) => {
             last_item_id = 0
         }
 
-        //Add new user
-        dataObj.users.push({id: last_item_id + 1, email: email, password: password}); //add some data
-        fs.writeFile(jsonUsers, JSON.stringify(dataObj), (err, result) => {  // WRITE
+        dataObj.users.push({id: last_item_id + 1, email: email, password: password});
+        fs.writeFile(Users, JSON.stringify(dataObj), (err, result) => {
             if (err) {
                 const status = 401
                 const message = err
@@ -81,19 +82,17 @@ server.post('/auth/register', (req, res) => {
         });
     });
 
-// Create token for new user
     const access_token = createToken({email, password})
     console.log("Access Token:" + access_token);
     res.status(200).json({access_token})
 })
 
-// Login to one of the users from ./users.json
 server.post('/auth/login', (req, res) => {
     console.log("login endpoint called; request body:");
     console.log(req.body);
     const {email, password} = req.body;
     if (isAuthenticated({email, password}) === false) {
-        const status = 403
+        const status = 400
         const message = 'Incorrect email or password'
         res.status(status).json({status, message})
         return
@@ -105,7 +104,7 @@ server.post('/auth/login', (req, res) => {
 
 server.use(/^(?!\/auth).*$/,  (req, res, next) => {
     if (req.headers.authorization === undefined || req.headers.authorization.split(' ')[0] !== 'Bearer') {
-        const status = 401
+        const status = 400
         const message = 'Error in authorization format'
         res.status(status).json({status, message})
         return

@@ -4,25 +4,29 @@
       "firstName": "Peter",
       "lastName": "Parker",
       "phoneNumber": "+12345678901",
+      "creationDate": "April 11, 2022",
       "id": 1
     },
     {
       "id": 2,
       "firstName": "Norman",
       "lastName": "Osborn",
-      "phoneNumber": "+12345678901"
+      "phoneNumber": "+12345678901",
+      "creationDate": "April 13, 2022"
     },
     {
       "id": 3,
       "firstName": "Harry",
       "lastName": "Osborn",
-      "phoneNumber": "+12345678901"
+      "phoneNumber": "+12345678901",
+      "creationDate": "April 13, 2022"
     },
     {
       "id": 4,
       "firstName": "Eddie",
       "lastName": "Brock",
-      "phoneNumber": "+12345678901"
+      "phoneNumber": "+12345678901",
+      "creationDate": "April 15, 2022"
     }
   ]
 }

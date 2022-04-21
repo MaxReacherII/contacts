@@ -10,10 +10,26 @@ class UserStore {
         makeAutoObservable(this)
     }
 
+    isLoggedIn = !!sessionStorage.getItem('access_token');
+
     userData: IUserData = {
         email: sessionStorage.getItem('email') ? sessionStorage.getItem('email') : '',
         access_token: sessionStorage.getItem('access_token') ? sessionStorage.getItem('access_token') : ''
     }
+
+    signIn(data: IUserData){
+        this.userData = data;
+        sessionStorage.setItem('email', data.email);
+        sessionStorage.setItem('access_token', data.access_token);
+        this.isLoggedIn = true;
+    }
+
+    signOut(){
+        this.userData.email = '';
+        this.userData.access_token = '';
+        sessionStorage.clear();
+        this.isLoggedIn = false;
+    }
 }
 
-export const userStore = new UserStore()
+export const userStore = new UserStore();

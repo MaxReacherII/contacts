@@ -18,6 +18,9 @@ const genTheme = (type: PaletteMode) => {
             background: {
                 default: type==='dark' ? '#303030' : '#fafafa',
                 paper: type==='dark' ? '#424242' : '#fff'
+            },
+            info: {
+                main: '#29b6f6'
             }
         }
     })

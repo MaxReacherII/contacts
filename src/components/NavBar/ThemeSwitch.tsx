@@ -1,12 +1,11 @@
 import {styled} from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import {themeStore} from "../../store/themeStore";
-import {useEffect, useState} from "react";
-import {FormControlLabel, PaletteMode} from "@mui/material";
+import {FormControlLabel} from "@mui/material";
 import {observer} from "mobx-react-lite";
 
 
-const CustomSwitch = styled(Switch)(({ theme }) => ({
+const CustomSwitch = styled(Switch)(() => ({
     width: 62,
     height: 34,
     padding: 7,
