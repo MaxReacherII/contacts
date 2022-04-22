@@ -12,6 +12,6 @@ Launching
 
 Additional commands
 ------------
--yarn start:client (launch client only)
--yarn start:api (json-server)
--yarn start:auth (auth for json-server)
+- yarn start:client
+- yarn start:api
+- yarn start:auth
