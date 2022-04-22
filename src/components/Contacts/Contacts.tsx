@@ -72,6 +72,7 @@ const Contacts = observer(() => {
     const [contacts, setContacts] = useState<IContacts[]>();
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState<IContacts[]>();
+    const [pageSize, setPageSize] = useState(10);
     const [editingValues, setEditingValues] = useState<GridRowModel>();
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -221,8 +222,9 @@ const Contacts = observer(() => {
                 rows={searchText ? searchResults : contacts}
                 columns={columns}
                 editMode='row'
-                pageSize={20}
-                rowsPerPageOptions={[20]}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                rowsPerPageOptions={[5, 10, 15, 100]}
                 checkboxSelection
                 disableSelectionOnClick
                 disableColumnMenu
